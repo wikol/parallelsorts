@@ -116,6 +116,7 @@ void test_on_almost_sorted_data(unsigned size) {
   while (number_of_inversions) {
     int i = dis(gen), j = dis(gen);
     std::swap(data[i], data[j]);
+    number_of_inversions--;
   }
 
   test_all(data, size, message);
