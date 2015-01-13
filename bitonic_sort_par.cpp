@@ -10,27 +10,31 @@ void bitonic_merge_seq(int *T, unsigned n, bool ascending) {
   if (n == 1)
     return;
 
-  unsigned half_n = n >> 1;
+  unsigned m = 1;
+  while((m << 1) < n) {
+    m <<= 1;
+  }
+
   if (ascending) {
-    for (unsigned i = 0; i < n - half_n; i++) {
-      if (T[i] > T[i + half_n]) {
+    for (unsigned i = 0; i < n - m; i++) {
+      if (T[i] > T[i + m]) {
         int tmp = T[i];
-        T[i] = T[i + half_n];
-        T[i + half_n] = tmp;
+        T[i] = T[i + m];
+        T[i + m] = tmp;
       }
     }
   } else {
-    for (unsigned i = 0; i < n - half_n; i++) {
-      if (T[i] < T[i + half_n]) {
+    for (unsigned i = 0; i < n - m; i++) {
+      if (T[i] < T[i + m]) {
         int tmp = T[i];
-        T[i] = T[i + half_n];
-        T[i + half_n] = tmp;
+        T[i] = T[i + m];
+        T[i + m] = tmp;
       }
     }
   }
   // Recursive calls
-  bitonic_sort_seq(T, half_n, ascending);
-  bitonic_sort_seq(T + half_n, half_n, ascending);
+  bitonic_merge_seq(T, m, ascending);
+  bitonic_merge_seq(T + m, n - m, ascending);
 }
 
 void bitonic_merge(int *T, unsigned n, bool ascending, unsigned num_threads) {
@@ -42,34 +46,39 @@ void bitonic_merge(int *T, unsigned n, bool ascending, unsigned num_threads) {
   if (n == 1)
     return;
 
-  unsigned half_n = n >> 1;
+  unsigned m = 1;
+  while((m << 1) < n) {
+    m <<= 1;
+  }
 
   if (ascending) {
     #pragma omp parallel for num_threads(num_threads)
-    for (unsigned i = 0; i < n - half_n; i++) {
-      if (T[i] > T[i + half_n]) {
+    for (unsigned i = 0; i < n - m; i++) {
+      if (T[i] > T[i + m]) {
         int tmp = T[i];
-        T[i] = T[i + half_n];
-        T[i + half_n] = tmp;
+        T[i] = T[i + m];
+        T[i + m] = tmp;
       }
     }
   } else {
     #pragma omp parallel for num_threads(num_threads)
-    for (unsigned i = 0; i < n - half_n; i++) {
-      if (T[i] < T[i + half_n]) {
+    for (unsigned i = 0; i < n - m; i++) {
+      if (T[i] < T[i + m]) {
         int tmp = T[i];
-        T[i] = T[i + half_n];
-        T[i + half_n] = tmp;
+        T[i] = T[i + m];
+        T[i + m] = tmp;
       }
     }
   }
-// Recursive calls
+  // Recursive calls
+  unsigned num_threads_first_half = (num_threads >> 1);
+  unsigned num_threads_second_half = num_threads - num_threads_first_half;
   #pragma omp parallel sections
   {
     #pragma omp section
-    { bitonic_sort(T, half_n, ascending, (num_threads >> 1)); }
+    { bitonic_merge(T, m, ascending, num_threads_first_half); }
     #pragma omp section
-    { bitonic_sort(T + half_n, half_n, ascending, (num_threads >> 1)); }
+    { bitonic_merge(T + m, n - m, ascending, num_threads_second_half); }
   }
 }
 
@@ -79,10 +88,8 @@ void bitonic_sort_seq(int *T, unsigned n, bool ascending) {
 
   unsigned half_n = n >> 1;
   // Recursive calls
-  // Left half sorted ascending
-  // Right half sorted descending
-  bitonic_sort_seq(T, half_n, true);
-  bitonic_sort_seq(T + half_n, half_n, false);
+  bitonic_sort_seq(T, half_n, !ascending);
+  bitonic_sort_seq(T + half_n, n - half_n, ascending);
 
   // Bitonic merge
   bitonic_merge_seq(T, n, ascending);
@@ -99,14 +106,14 @@ void bitonic_sort(int *T, unsigned n, bool ascending, unsigned num_threads) {
 
   unsigned half_n = n >> 1;
   // Recursive calls
-  // Left half sorted ascending
-  // Right half sorted descending
+  unsigned num_threads_first_half = (num_threads >> 1);
+  unsigned num_threads_second_half = num_threads - num_threads_first_half;
   #pragma omp parallel sections
   {
     #pragma omp section
-    { bitonic_sort(T, half_n, true, (num_threads >> 1)); }
+    { bitonic_sort(T, half_n, !ascending, num_threads_first_half); }
     #pragma omp section
-    { bitonic_sort(T + half_n, half_n, false, (num_threads >> 1)); }
+    { bitonic_sort(T + half_n, n - half_n, ascending, num_threads_second_half); }
   }
 
   // Bitonic merge
