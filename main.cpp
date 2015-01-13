@@ -6,6 +6,7 @@
 #include <cstring>
 #include <limits>
 
+#include "bitonic_sort.h"
 #include "merge_sort.h"
 
 void test_one_algorithm(std::function<void(int*, unsigned)> sort_to_test,
@@ -40,6 +41,8 @@ void test_all(int *data, unsigned size, const char *message) {
 
 	// Add new sorting algorithms here
 	test_one_algorithm(std_sort, data, size, "Running std::sort");
+  test_one_algorithm(bitonic_sort_seq, data, size, "Running sequential bitonic sort");
+  test_one_algorithm(bitonic_sort_par, data, size, "Running parallel bitonic sort");
 	test_one_algorithm(merge_sort_seq, data, size, "Running sequential mergesort");
 	test_one_algorithm(merge_sort_par, data, size, "Running parallel mergesort");
 	test_one_algorithm(merge_sort_par_merge_seq, data, size,
@@ -53,7 +56,7 @@ void test_on_random_data(unsigned size) {
 	std::uniform_int_distribution<> dis(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 
 	int *data = new int[size];
-	for (int i = 0;i<size;i++)
+	for (unsigned i = 0;i<size;i++)
 		data[i] = dis(gen);
 
 	char message[100];
