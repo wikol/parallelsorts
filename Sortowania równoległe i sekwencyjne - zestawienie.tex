@@ -51,11 +51,11 @@
 \maketitle
 
 \section{Cel projektu}
-Celem pniższego projektu jest porównanie efektywności i czasu działania kilku algorytmów sortowania z różnym stopniem zrównoleglenia.
+Celem poniższego projektu jest porównanie efektywności i czasu działania kilku algorytmów sortowania z różnym stopniem zrównoleglenia.
 
 \section{Zaimplementowane algorytmy}
 Projekt zaostał zaimplementowany w języku C++ (w standardzie c++ 11).
-Do fragmentów wielowątkowych użyliśmy technologii OpenMP. \newline
+Do fragmentów wielowątkowych użyliśmy biblioteki OpenMP. \newline
 Dana praca porównuje działania następujących algorytmów:
 \begin{itemize}
 
@@ -101,6 +101,20 @@ Dana praca porównuje działania następujących algorytmów:
 \end{figure}
 
 \section{Wnioski}
+\begin{itemize}
+\item
+Algorytmy z elementami równoległymi działają lepiej niż sekwencyjne na większej liczbie wątków.
+\item
+Zrównoleglony mergesort na 2, 4 orazy 8 wątkach działa szybciej niż std::sort. W przypadku pozostałych algorytmów również możemy odnotować znaczacy wzrost wydajności.
+\item
+Przy użyciu jednego wątku algorytmy równolegle często wykazują gorszy czas działania niż sekwencyjne.
+\item
+Równoległe bitoniczne sortowanie pomimo gorszej złożoności ($O(nlog^2n)$) jest w stanie wyprzedzić sekwencyjne algorytmy o złożoności $O(nlogn)$.
+\item
+Ze względu na mała liczbę wątków prefix sum użyty w równoległym algorytmie radixsort nie był w stanie w pełni wykazać swojej mocy, ale i tak możnaby było zauważyć około czterokrotne przyśpieszenie w stosunku do sekwencyjnego.
+\item
+Równoległy algorytm merge sort okazał się być najszybszym z całej stawki, wyprzedzając nawet algorytm std::sort.
+\end{itemize}
 
 \section{Źródła}
 Bitonic sort:
