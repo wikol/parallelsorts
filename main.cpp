@@ -59,6 +59,8 @@ void test_all(int *data, unsigned size, const char *message) {
 	test_one_algorithm(merge_sort_hybrid, data, size, "Running hybrid mergesort");
   test_one_algorithm(radix_sort_seq, data, size, "Running sequential radixsort");
   test_one_algorithm(radix_sort_par, data, size, "Running parallel radixsort");
+
+  delete[] data;
 }
 
 void test_on_random_data(unsigned size) {
@@ -67,7 +69,7 @@ void test_on_random_data(unsigned size) {
 	std::uniform_int_distribution<> dis(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 
 	int *data = new int[size];
-	for (unsigned i = 0;i<size;i++)
+	for (unsigned i = 0; i < size; i++)
 		data[i] = dis(gen);
 
 	char message[100];
@@ -75,6 +77,50 @@ void test_on_random_data(unsigned size) {
 
 	test_all(data, size, message);
 }
+
+void test_on_sorted_data(unsigned size) {
+  int *data = new int[size];
+  for (unsigned i = 0; i < size; i++)
+    data[i] = i;
+
+  char message[100];
+  std::sprintf(message, "Testing on already sorted data of size %u", size);
+
+  test_all(data, size, message);
+}
+
+void test_on_reversely_sorted_data(unsigned size) {
+  int *data = new int[size];
+  for (unsigned i = 0; i < size; i++)
+    data[i] = size - i;
+
+  char message[100];
+  std::sprintf(message, "Testing on reversely sorted data of size %u", size);
+
+  test_all(data, size, message);
+}
+
+void test_on_almost_sorted_data(unsigned size) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, size - 1);
+
+  int *data = new int[size];
+  for (unsigned i = 0; i < size; i++)
+    data[i] = i;
+
+  char message[100];
+  std::sprintf(message, "Testing on almost sorted data of size %u", size);
+
+  int number_of_inversions = 1 << 12;
+  while (number_of_inversions) {
+    int i = dis(gen), j = dis(gen);
+    std::swap(data[i], data[j]);
+  }
+
+  test_all(data, size, message);
+}
+
 
 const int TESTCASE_SIZE = 1 << 24;
 
@@ -84,5 +130,8 @@ int main(int argc, char **argv) {
     omp_set_num_threads(std::atoi(argv[1]));
   }
 	test_on_random_data(TESTCASE_SIZE);
+  test_on_sorted_data(TESTCASE_SIZE);
+  test_on_reversely_sorted_data(TESTCASE_SIZE);
+  test_on_almost_sorted_data(TESTCASE_SIZE);
 	return 0;
 }
