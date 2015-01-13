@@ -1,5 +1,60 @@
 #include <omp.h>
-#include "bitonic_sort_par.h"
+#include "bitonic_sort.h"
+
+namespace bitonic_sort_seq_internal {
+
+void bitonic_sort_seq(int *T, unsigned n, bool ascending);
+
+void bitonic_merge_seq(int *T, unsigned n, bool ascending) {
+  if (n == 1)
+    return;
+
+  unsigned m = 1;
+  while((m << 1) < n) {
+    m <<= 1;
+  }
+
+  if (ascending) {
+    for (unsigned i = 0; i < n - m; i++) {
+      if (T[i] > T[i + m]) {
+        int tmp = T[i];
+        T[i] = T[i + m];
+        T[i + m] = tmp;
+      }
+    }
+  } else {
+    for (unsigned i = 0; i < n - m; i++) {
+      if (T[i] < T[i + m]) {
+        int tmp = T[i];
+        T[i] = T[i + m];
+        T[i + m] = tmp;
+      }
+    }
+  }
+  // Recursive calls
+  bitonic_merge_seq(T, m, ascending);
+  bitonic_merge_seq(T + m, n - m, ascending);
+}
+
+void bitonic_sort_seq(int *T, unsigned n, bool ascending) {
+  if (n == 1)
+    return;
+
+  unsigned half_n = n >> 1;
+  // Recursive calls
+  bitonic_sort_seq(T, half_n, !ascending);
+  bitonic_sort_seq(T + half_n, n - half_n, ascending);
+
+  // Bitonic merge
+  bitonic_merge_seq(T, n, ascending);
+}
+}
+
+/* Sequential bitonic sort */
+void bitonic_sort_seq(int *T, unsigned n) {
+  bitonic_sort_seq_internal::bitonic_sort_seq(T, n, true);
+}
+
 
 namespace bitonic_sort_par_internal {
 

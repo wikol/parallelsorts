@@ -1,3 +1,5 @@
+#include <omp.h>
+
 #include <cstdio>
 #include <functional>
 #include <algorithm>
@@ -5,7 +7,9 @@
 #include <random>
 #include <cstring>
 #include <limits>
+#include <chrono>
 
+#include "bitonic_sort.h"
 #include "merge_sort.h"
 #include "radix_sort.h"
 
@@ -15,7 +19,12 @@ void test_one_algorithm(std::function<void(int*, unsigned)> sort_to_test,
 
 	int *data_copy = new int[size];
 	std::memcpy(data_copy, data, size*sizeof(int));
+
+	auto start = std::chrono::high_resolution_clock::now();
 	sort_to_test(data_copy, size);
+    auto finish = std::chrono::high_resolution_clock::now();
+    std::printf("\t\tReal time used: %lums\n",
+    			std::chrono::duration_cast<std::chrono::milliseconds>(finish-start).count());
 
 	int *data_copy_for_std = new int[size];
 	std::memcpy(data_copy_for_std, data, size*sizeof(int));
@@ -41,6 +50,8 @@ void test_all(int *data, unsigned size, const char *message) {
 
 	// Add new sorting algorithms here
 	test_one_algorithm(std_sort, data, size, "Running std::sort");
+  test_one_algorithm(bitonic_sort_seq, data, size, "Running sequential bitonic sort");
+  test_one_algorithm(bitonic_sort_par, data, size, "Running parallel bitonic sort");
 	test_one_algorithm(merge_sort_seq, data, size, "Running sequential mergesort");
 	test_one_algorithm(merge_sort_par, data, size, "Running parallel mergesort");
 	test_one_algorithm(merge_sort_par_merge_seq, data, size,
@@ -56,7 +67,7 @@ void test_on_random_data(unsigned size) {
 	std::uniform_int_distribution<> dis(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 
 	int *data = new int[size];
-	for (int i = 0;i<size;i++)
+	for (unsigned i = 0;i<size;i++)
 		data[i] = dis(gen);
 
 	char message[100];
