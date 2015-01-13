@@ -6,6 +6,9 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{color}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{float}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -79,8 +82,23 @@ Dana praca porównuje działania następujących algorytmów:
 
 
 \section{Przeprowadzone testy}
-
-
+\begin{figure}[H]
+\raggedleft
+\includegraphics[width=1.20\textwidth, height=0.35\textheight,left]{random_data.png}
+\caption{Czas działania w zależności od liczby wątków na losowych danych}
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=1.20\textwidth, height=0.35\textheight, left]{sorted_data.png}
+\caption{Czas działania w zależności od liczby wątków na posortowanych danych}
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=1.20\textwidth, height=0.35\textheight, left]{reversely_sorted_data.png}
+\caption{Czas działania w zależności od liczby wątków na odwrotnie posortowanych danych}
+\end{figure}
+\begin{figure}[H]
+\includegraphics[width=1.20\textwidth, height=0.35\textheight, left]{almost_sorted_data.png}
+\caption{Czas działania w zależności od liczby wątków na prawie posortowanych danych}
+\end{figure}
 
 \section{Wnioski}
 
