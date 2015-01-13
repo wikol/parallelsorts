@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{amsmath}
+%Gummi|065|=)
+\title{\textbf{Sortowania równoległe i sekwencyjne}}
+\author{Dorota Kapturkiewicz\\
+		Wiktor Kuropatwa\\
+		Karol Różycki}
+\date{}
+\begin{document}
+
+\maketitle
+
+\section{Cel projektu}
+Celem pniższego projektu jest porównanie efektywności i czasu działania kilku algorytmów sortowania z różnym stopniem zrównoleglenia.
+
+\section{Zaimplementowane algorytmy}
+Projekt zaostał zaimplementowany w języku C++ (w standardzie c++ 11).
+Do fragmentów wielowątkowych użyliśmy technologii OpenMP. \newline
+Dana praca porównuje działania następujących algorytmów:
+\begin{itemize}
+
+\item merge sort 
+\begin{itemize}
+\item w pełni sekwencyjny 
+\item równoległe wywołania rekurencyjne sortowania, sekwencyjne złączanie
+\item równoległe sortowanie i złączanie
+\end{itemize}
+
+\item bitonic sort
+\begin{itemize}
+\item w pełni sekwencyjny 
+\item zrównoleglone wywołania rekurencyjne i porównywanie wartości w bitonic merge'u
+\end{itemize}
+
+\item radix sort
+\begin{itemize}
+\item w pełni sekwencyjny 
+\item zrównoleglony prefix sum, przepisywanie wartości i przygotowywanie danych (xor)
+\end{itemize}
+
+\end{itemize}
+
+
+\section{Przeprowadzone testy}
+
+
+\section{Wyniki}
+
+\section{Wnioski}
+
+\section{Źródła}
+
+
+\end{document}
