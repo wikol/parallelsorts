@@ -11,6 +11,7 @@
 
 #include "bitonic_sort.h"
 #include "merge_sort.h"
+#include "radix_sort.h"
 
 void test_one_algorithm(std::function<void(int*, unsigned)> sort_to_test,
 						int *data, unsigned size, const char *message) {
@@ -56,6 +57,8 @@ void test_all(int *data, unsigned size, const char *message) {
 	test_one_algorithm(merge_sort_par_merge_seq, data, size,
 					   "Running parallel mergesort with sequential merges");
 	test_one_algorithm(merge_sort_hybrid, data, size, "Running hybrid mergesort");
+  test_one_algorithm(radix_sort_seq, data, size, "Running sequential radixsort");
+  test_one_algorithm(radix_sort_par, data, size, "Running parallel radixsort");
 }
 
 void test_on_random_data(unsigned size) {
@@ -73,7 +76,7 @@ void test_on_random_data(unsigned size) {
 	test_all(data, size, message);
 }
 
-const int TESTCASE_SIZE = 1 << 20;
+const int TESTCASE_SIZE = 1 << 24;
 
 int main(int argc, char **argv) {
   if(argc > 1) {
