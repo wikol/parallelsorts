@@ -79,6 +79,7 @@ void test_on_random_data(unsigned size) {
 const int TESTCASE_SIZE = 1 << 24;
 
 int main(int argc, char **argv) {
+  omp_set_nested(true);
   if(argc > 1) {
     omp_set_num_threads(std::atoi(argv[1]));
   }
