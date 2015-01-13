@@ -1,5 +1,4 @@
 #include <omp.h>
-#include <cstdio>
 #include "bitonic_sort_par.h"
 
 namespace bitonic_sort_par_internal {
