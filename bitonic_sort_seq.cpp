@@ -1,11 +1,8 @@
 #include "bitonic_sort_seq.h"
 
-/* Sequential bitonic sort */
-void bitonic_sort_seq(int *T, unsigned n) {
-  bitonic_sort_seq_internal::bitonic_sort(T, n, true);
-}
-
 namespace bitonic_sort_seq_internal {
+
+void bitonic_sort(int *T, unsigned n, bool ascending);
 
 void bitonic_merge(int *T, unsigned n, bool ascending) {
   if (n == 1)
@@ -48,4 +45,9 @@ void bitonic_sort(int *T, unsigned n, bool ascending) {
   // Bitonic merge
   bitonic_merge(T, n, ascending);
 }
+}
+
+/* Sequential bitonic sort */
+void bitonic_sort_seq(int *T, unsigned n) {
+  bitonic_sort_seq_internal::bitonic_sort(T, n, true);
 }
