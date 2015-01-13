@@ -56,7 +56,6 @@ void test_all(int *data, unsigned size, const char *message) {
 	test_one_algorithm(merge_sort_par, data, size, "Running parallel mergesort");
 	test_one_algorithm(merge_sort_par_merge_seq, data, size,
 					   "Running parallel mergesort with sequential merges");
-	test_one_algorithm(merge_sort_hybrid, data, size, "Running hybrid mergesort");
   test_one_algorithm(radix_sort_seq, data, size, "Running sequential radixsort");
   test_one_algorithm(radix_sort_par, data, size, "Running parallel radixsort");
 
