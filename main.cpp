@@ -56,7 +56,10 @@ void test_on_random_data(unsigned size) {
 	for (int i = 0;i<size;i++)
 		data[i] = dis(gen);
 
-	test_all(data, size, "Testing on random data");
+	char message[100];
+	std::sprintf(message, "Testing on random data of size %u", size);
+
+	test_all(data, size, message);
 }
 
 const int TESTCASE_SIZE = 1 << 20;
