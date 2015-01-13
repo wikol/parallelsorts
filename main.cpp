@@ -75,7 +75,10 @@ void test_on_random_data(unsigned size) {
 
 const int TESTCASE_SIZE = 1 << 20;
 
-int main() {
+int main(int argc, char **argv) {
+  if(argc > 1) {
+    omp_set_num_threads(std::atoi(argv[1]));
+  }
 	test_on_random_data(TESTCASE_SIZE);
 	return 0;
 }
