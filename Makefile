@@ -6,12 +6,11 @@ SOURCES := \
 	bitonic_sort.cpp \
 	radix_sort.cpp \
 	merge_sort.cpp
-EXECUTABLE=test_sort_algorithms
 
 BIN := test_sort_algorithms
 
 all:
-	$(CC) $(CFLAGS) $(SOURCES) -o $(EXECUTABLE)
+	$(CC) $(CFLAGS) $(SOURCES) -o $(BIN)
 
 clean:
 	rm -rf test_sort_algorithms
