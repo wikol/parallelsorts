@@ -1,10 +1,8 @@
 
 SOURCE := \
 	main.cpp \
-	bitonic_sort_par.cpp \
-	bitonic_sort_seq.cpp \
-	radix_sort_par.cpp \
-	radix_sort_seq.cpp \
+	bitonic_sort.cpp \
+	radix_sort.cpp \
 	merge_sort.cpp
 
 BIN := test_sort_algorithms
